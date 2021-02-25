@@ -9,6 +9,7 @@ import com.hashcode2021.deserters.data.ScenarioOutput;
 import com.hashcode2021.deserters.file.InputDataReader;
 import com.hashcode2021.deserters.util.Debuggable;
 import com.hashcode2021.deserters.util.ScenarioOutputWriter;
+import org.apache.log4j.BasicConfigurator;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.time.Duration;
@@ -27,6 +28,7 @@ public class Runner implements Debuggable {
     private ScenarioOutputWriter scenarioOutputWriter;
 
     public static void main(String[] args) {
+        BasicConfigurator.configure();
         new Runner().run();
     }
 
@@ -84,7 +86,7 @@ public class Runner implements Debuggable {
         try {
             List<Future<ScenarioOutput>> futures = executorService.invokeAll(workers);
             List<ScenarioOutput> outputs = new ArrayList<>();
-            for(var future : futures){
+            for(Future<ScenarioOutput> future : futures){
                 outputs.add(future.get());
             }
 
@@ -98,7 +100,7 @@ public class Runner implements Debuggable {
     }
 
     private void calculatePoints(List<ScenarioOutput> outputs) {
-        for(var output : outputs){
+        for(ScenarioOutput output : outputs){
             logDebug("Points for %s: [%s].", output.getFileName(), "?");
         }
     }
