@@ -55,21 +55,18 @@ public class Runner implements Debuggable {
 
     private List<Algorithm> getWorkers(){
         List<String> inputFileNames = Arrays.asList(
-                "a_example.in",
-                "b_small.in",
-                "c_medium.in",
-                "d_quite_big.in",
-                "e_also_big.in",
-                "f_biggest.in"
+                "a.txt"
+//                "b.txt",
+//                "c.txt",
+//                "d.txt",
+//                "e.txt",
+//                "f.txt"
         );
 
         List<ScenarioInput> scenarioInputs = new ArrayList<>();
         for(String fileName : inputFileNames){
             InputData inputData = inputDataReader.readData(fileName);
             scenarioInputs.add(new ScenarioInput(fileName, inputData, new DynamicParameters("set1")));
-            scenarioInputs.add(new ScenarioInput(fileName, inputData, new DynamicParameters("set2")));
-            scenarioInputs.add(new ScenarioInput(fileName, inputData, new DynamicParameters("set3")));
-            scenarioInputs.add(new ScenarioInput(fileName, inputData, new DynamicParameters("set4")));
         }
 
         List<Algorithm> workers = new ArrayList<>();
