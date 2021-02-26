@@ -14,8 +14,9 @@ import java.util.stream.Stream;
 @Component
 public class ScenarioOutputWriter implements Debuggable {
     private void addDataToBufferedWritter(BufferedWriter bufferedWriter, OutputData outputData) throws IOException {
-        bufferedWriter.write(outputData.getTypesOfPizzas() + "\n");
-        bufferedWriter.write(Stream.of(outputData.getPizzasIndexes()).map(Object::toString).collect(Collectors.joining(" ")));
+        bufferedWriter.write("MOCK FOR OUTPUT.");
+//        bufferedWriter.write(outputData.getTypesOfPizzas() + "\n");
+//        bufferedWriter.write(Stream.of(outputData.getPizzasIndexes()).map(Object::toString).collect(Collectors.joining(" ")));
     }
 
     public void writeOutputData(ScenarioOutput scenarioOutput) {

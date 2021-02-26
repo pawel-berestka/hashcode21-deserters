@@ -1,38 +1,46 @@
 package com.hashcode2021.deserters.data;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import com.hashcode2021.deserters.data.algorithm.input.Car;
+import com.hashcode2021.deserters.data.algorithm.input.Intersection;
+import com.hashcode2021.deserters.data.algorithm.input.Street;
+import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+@Getter
 public class InputData {
-    private Integer maxNumberOfSlices;
-    private Integer differentTypes;
-    private Integer[] pizzas;
+    private final Integer simulationTime;
+    private final Integer intesectionCount;
+    private final Integer streetCount;
+    private final Integer carCount;
+    private final Integer pointsPerRD;
+    private final Map<String, Street> streetsByName;
+    private final List<Car> cars;
+    private final List<Intersection> intersections;
 
-    public Integer getMaxNumberOfSlices() {
-        return maxNumberOfSlices;
-    }
+    public InputData(Integer simulationTime, Integer intesectionCount, Integer streetCount, Integer carCount, Integer pointsPerRD, Map<String, Street> streetsByName, List<Car> cars) {
+        this.simulationTime = simulationTime;
+        this.intesectionCount = intesectionCount;
+        this.streetCount = streetCount;
+        this.carCount = carCount;
+        this.pointsPerRD = pointsPerRD;
+        this.streetsByName = streetsByName;
+        this.cars = cars;
 
-    public void setMaxNumberOfSlices(Integer maxNumberOfSlices) {
-        this.maxNumberOfSlices = maxNumberOfSlices;
-    }
 
-    public Integer getDifferentTypes() {
-        return differentTypes;
-    }
+        List<Intersection> intersections = new ArrayList<>();
+        for(int i=0; i<intesectionCount; ++i) {
+            List<Street> intersectionStreets = new ArrayList<>();
+            for (Street street : streetsByName.values()) {
+                if (i == street.getEndIntersectionIndx()) {
+                    intersectionStreets.add(street);
+                }
+            }
 
-    public void setDifferentTypes(Integer differentTypes) {
-        this.differentTypes = differentTypes;
-    }
-
-    public Integer[] getPizzas() {
-        return pizzas;
-    }
-
-    public void setPizzas(Integer[] pizzas) {
-        this.pizzas = pizzas;
-    }
-
-    public String toString() {
-        return String.format("Slices: %s, DifferentTypes: %s\n%s", maxNumberOfSlices, differentTypes, Stream.of(pizzas).map(Object::toString).collect(Collectors.joining(",")));
+            intersections.add(new Intersection(i, intersectionStreets));
+        }
+        this.intersections = intersections;
     }
 }

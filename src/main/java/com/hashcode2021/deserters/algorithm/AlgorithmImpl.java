@@ -3,50 +3,56 @@ package com.hashcode2021.deserters.algorithm;
 import com.hashcode2021.deserters.data.InputData;
 import com.hashcode2021.deserters.data.OutputData;
 import com.hashcode2021.deserters.data.ScenarioInput;
-import com.hashcode2021.deserters.data.ScenarioOutput;
+import com.hashcode2021.deserters.data.algorithm.input.*;
+import com.hashcode2021.deserters.util.Debuggable;
+import org.graalvm.compiler.hotspot.replacements.HashCodeSnippets;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
+import java.util.*;
 
-public class AlgorithmImpl extends Algorithm {
+public class AlgorithmImpl extends Algorithm implements Debuggable {
     public AlgorithmImpl(ScenarioInput scenarioInput) {
         super(scenarioInput);
     }
 
     @Override
     public OutputData calculate(ScenarioInput scenarioInput) {
-        int bestScore = 0;
-        List<Integer> bestPizzasSet = new ArrayList<>();
-
+        logDebug("Executing algorithm.");
         InputData inputData = scenarioInput.getInputData();
-        Integer[] pizzas = inputData.getPizzas();
-        Integer target = inputData.getMaxNumberOfSlices();
 
-        Integer actualScore = 0;
-        List<Integer> usedPizzas = new ArrayList<>(pizzas.length);
-        for (int i = pizzas.length - 1; i >= 1; --i) {
-            actualScore += pizzas[i];
-            usedPizzas.add(i);
 
-            for (int k = i - 1; k >= 0; --k) {
-                if ((target - actualScore) - pizzas[k] > 0) {
-                    actualScore += pizzas[k];
-                    usedPizzas.add(k);
+        List<StreetLightSchedule> schedules = new ArrayList<>();
+
+        Integer remainingTime = inputData.getSimulationTime();
+        for(Intersection intersection : inputData.getIntersections()){
+            Street mostInterestingStreet = null;
+            Integer smallestTime = 0;
+
+            for(Street street : intersection.getInputStreets()){
+                Map<Car, Integer> carWeights = new HashMap<>();
+
+                for(Car car : street.getCarQueue()){
+                    carWeights.put(car, getMaxWeightForCarBeforeLight(car, remainingTime));
                 }
             }
 
-            if (actualScore > bestScore) {
-                bestScore = actualScore;
-                bestPizzasSet = new ArrayList<>(usedPizzas);
-            }
-            actualScore = 0;
-            usedPizzas = new ArrayList<>(pizzas.length);
+
         }
 
-        Integer[] result = new Integer[bestPizzasSet.size()];
+        return new OutputData();
+    }
 
-        return new OutputData(bestPizzasSet.size(), bestPizzasSet.toArray(result));
+    public Integer getMaxWeightForCarBeforeLight(Car car, Integer remainingTime){
+        Integer optimisticTimeLeft = 0;
+
+        for(Street remainingStreet : car.getAllRemainingStreets()){
+            optimisticTimeLeft += remainingStreet.getStreetLength();
+        }
+
+        if(optimisticTimeLeft < remainingTime){
+            optimisticTimeLeft = 1000 + (remainingTime - optimisticTimeLeft);
+        }
+
+        return optimisticTimeLeft;
     }
 
     @Override

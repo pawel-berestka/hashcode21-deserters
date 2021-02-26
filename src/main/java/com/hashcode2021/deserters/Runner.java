@@ -28,7 +28,6 @@ public class Runner implements Debuggable {
     private ScenarioOutputWriter scenarioOutputWriter;
 
     public static void main(String[] args) {
-        BasicConfigurator.configure();
         new Runner().run();
     }
 
@@ -55,9 +54,9 @@ public class Runner implements Debuggable {
 
     private List<Algorithm> getWorkers(){
         List<String> inputFileNames = Arrays.asList(
-                "a.txt"
-//                "b.txt",
-//                "c.txt",
+                "a.txt",
+                "b.txt",
+                "c.txt"
 //                "d.txt",
 //                "e.txt",
 //                "f.txt"
@@ -92,7 +91,8 @@ public class Runner implements Debuggable {
 
             return outputs;
         } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException("Something went wrong...");
+            e.printStackTrace();
+            throw new RuntimeException("Something went wrong... " + e.getMessage());
         }
     }
 
